@@ -29,10 +29,7 @@ const typeDefs = `
 const resolvers = {
   Query: {
     getArticles(parent, args, context, info){
-      return axios.get(`https://newsapi.org/v2/everything?q=${args.query}&apiKey=${process.env.NEWS_API_KEY}`).then(response => {
-        console.log('data', process.env.NEWS_API_KEY, args.query, response.data)
-        return response.data
-      })
+      return axios.get(`https://newsapi.org/v2/everything?q=${args.query}&apiKey=${process.env.NEWS_API_KEY}`).then(response => response.data)
     }
   }
 }
