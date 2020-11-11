@@ -1,12 +1,12 @@
-import {GraphQLServer} from 'graphql-yoga'
-import axios from 'axios'
-import dotenv from 'dotenv'
+import { GraphQLServer } from 'graphql-yoga';
+import axios from 'axios';
+import dotenv from 'dotenv';
 
-dotenv.config()
+dotenv.config();
 
 const typeDefs = `
   type Query {
-    getArticles(query: String!): NewsApiResponse
+    getArticles(query: String!, page: Int): NewsApiResponse
   }
 
   type NewsApiResponse {
@@ -24,20 +24,22 @@ const typeDefs = `
     publishedAt: String,
     content: String
   }
-`
+`;
 
 const resolvers = {
   Query: {
-    getArticles(parent, args, context, info){
-      return axios.get(`https://newsapi.org/v2/everything?q=${args.query}&apiKey=${process.env.NEWS_API_KEY}`).then(response => response.data)
-    }
-  }
-}
+    getArticles(parent, args, context, info) {
+      return axios
+        .get(
+          `https://newsapi.org/v2/everything?q=${args.query}&apiKey=${process.env.NEWS_API_KEY}&page={args.page || 1}`
+        )
+        .then((response) => response.data);
+    },
+  },
+};
 
 const server = new GraphQLServer({ typeDefs, resolvers });
 
 server.start(() => {
-  console.log(
-    `Server running at http://localhost:4000/`
-  );
+  console.log(`Server running at http://localhost:4000/`);
 });
