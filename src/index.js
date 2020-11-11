@@ -29,11 +29,10 @@ const typeDefs = `
 const resolvers = {
   Query: {
     getArticles(parent, args, context, info) {
-      return axios
-        .get(
-          `https://newsapi.org/v2/everything?q=${args.query}&apiKey=${process.env.NEWS_API_KEY}&page={args.page || 1}`
-        )
-        .then((response) => response.data);
+      const URL = `https://newsapi.org/v2/everything?q=${args.query}&apiKey=${process.env.NEWS_API_KEY}&page=${args.page}`;
+      return axios.get(URL).then((response) => {
+        return response.data;
+      });
     },
   },
 };
